@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model appellation {
+  appellation_id                Int                             @id
+  appellation                   String                          @db.VarChar(50)
+  parent_id                     Int?
+  appellation_has_grape_variety appellation_has_grape_variety[]
+  wine                          wine[]
+  wine_blend                    wine_blend[]
+}
+
+model appellation_has_grape_variety {
+  appellation_id   Int
+  grape_variety_id Int
+  appellation      appellation   @relation(fields: [appellation_id], references: [appellation_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_appellation_has_grape_variety_appellation1")
+  grape_variety    grape_variety @relation(fields: [grape_variety_id], references: [grape_variety_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_appellation_has_grape_variety_grape_variety2")
+
+  @@id([appellation_id, grape_variety_id])
+  @@index([appellation_id], map: "fk_appellation_has_grape_variety_appellation1_idx")
+  @@index([grape_variety_id], map: "fk_appellation_has_grape_variety_grape_variety2")
+}
+
+model grape_variety {
+  grape_variety_id              Int                             @id
+  grape_variety                 String                          @db.VarChar(50)
+  wine_type_id                  Int?
+  appellation_has_grape_variety appellation_has_grape_variety[]
+  wine_type                     wine_type?                      @relation(fields: [wine_type_id], references: [wine_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_grape_variety_wine_type1")
+  wine                          wine[]
+  wine_blend_has_grape_variety  wine_blend_has_grape_variety[]
+
+  @@index([wine_type_id], map: "fk_grape_variety_wine_type1_idx")
+}
+
+model product {
+  product_id                   Int                            @id
+  product                      String                         @db.VarChar(50)
+  parent_id                    Int?
+  wine_type_pairs_with_product wine_type_pairs_with_product[]
+}
+
+model wine {
+  wine_id          Int            @id @default(autoincrement())
+  appellation_id   Int?
+  wine_color_id    Int
+  wine_blend_id    Int?
+  grape_variety_id Int?
+  appellation      appellation?   @relation(fields: [appellation_id], references: [appellation_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_appellation1")
+  grape_variety    grape_variety? @relation(fields: [grape_variety_id], references: [grape_variety_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_grape_variety1")
+  wine_blend       wine_blend?    @relation(fields: [wine_blend_id], references: [wine_blend_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_wine_blend1")
+  wine_color       wine_color     @relation(fields: [wine_color_id], references: [wine_color_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_wine_color1")
+
+  @@index([appellation_id], map: "fk_wine_appellation1")
+  @@index([grape_variety_id], map: "fk_wine_grape_variety1_idx")
+  @@index([wine_blend_id], map: "fk_wine_wine_blend1_idx")
+  @@index([wine_color_id], map: "fk_wine_wine_color1")
+}
+
+model wine_blend {
+  wine_blend_id                Int                            @id
+  wine_blend                   String?                        @db.VarChar(50)
+  wine_type_id                 Int?
+  appellation_id               Int?
+  wine_color_id                Int?
+  wine                         wine[]
+  appellation                  appellation?                   @relation(fields: [appellation_id], references: [appellation_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_blend_appellation1")
+  wine_type                    wine_type?                     @relation(fields: [wine_type_id], references: [wine_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_blend_wine_type1")
+  wine_blend_has_grape_variety wine_blend_has_grape_variety[]
+
+  @@index([appellation_id], map: "fk_wine_blend_appellation1_idx")
+  @@index([wine_type_id], map: "fk_wine_blend_wine_type1_idx")
+}
+
+model wine_blend_has_grape_variety {
+  wine_blend_id    Int
+  grape_variety_id Int
+  grape_variety    grape_variety @relation(fields: [grape_variety_id], references: [grape_variety_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_blend_has_grape_variety_grape_variety1")
+  wine_blend       wine_blend    @relation(fields: [wine_blend_id], references: [wine_blend_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_blend_has_grape_variety_wine_blend1")
+
+  @@id([wine_blend_id, grape_variety_id])
+  @@index([grape_variety_id], map: "fk_wine_blend_has_grape_variety_grape_variety1_idx")
+  @@index([wine_blend_id], map: "fk_wine_blend_has_grape_variety_wine_blend1_idx")
+}
+
+model wine_color {
+  wine_color_id Int     @id
+  wine_color    String? @db.VarChar(20)
+  wine          wine[]
+}
+
+model wine_type {
+  wine_type_id                 Int                            @id
+  wine_type                    String                         @db.VarChar(50)
+  grape_variety                grape_variety[]
+  wine_blend                   wine_blend[]
+  wine_type_pairs_with_product wine_type_pairs_with_product[]
+}
+
+model wine_type_pairs_with_product {
+  wine_type_id      Int
+  product_id        Int
+  excellent_pairing Int?      @db.TinyInt
+  product           product   @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_type_has_product_product1")
+  wine_type         wine_type @relation(fields: [wine_type_id], references: [wine_type_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_wine_type_has_product_wine_type1")
+
+  @@id([wine_type_id, product_id])
+  @@index([product_id], map: "fk_wine_type_has_product_product1_idx")
+  @@index([wine_type_id], map: "fk_wine_type_has_product_wine_type1_idx")
+}
