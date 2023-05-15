@@ -4,12 +4,6 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import bodyParser from "body-parser";
 
-// require("./models/connection");
-
-// var indexRouter = require("./routes/index");
-// var weatherRouter = require("./routes/weather");
-// var userRouter = require("./routes/users");
-
 var app = express();
 
 import cors from "cors";
@@ -28,22 +22,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// async function main() {
-//   const allWine = await prisma.wine.findMany();
-//   console.log(allWine);
-//   console.log("reached database");
-// }
-
-// main()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
-
 async function addNewWine() {
   const newWine = await prisma.wine.create({
     data: {
@@ -60,16 +38,6 @@ async function addNewWine() {
   console.log("new wine added successfully!");
 }
 
-// addNewWine()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
-
 async function deleteWine(): Promise<void> {
   const deleteUser = await prisma.wine.delete({
     where: {
@@ -82,19 +50,6 @@ async function deleteWine(): Promise<void> {
   console.log("new wine added successfully!");
 }
 
-// deleteWine()
-//   .then(async () => {
-//     await prisma.$disconnect();
-//   })
-//   .catch(async (e) => {
-//     console.error(e);
-//     await prisma.$disconnect();
-//     process.exit(1);
-//   });
-
-// app.use("/", indexRouter);
-// app.use("/weather", weatherRouter);
-// app.use("/users", userRouter);
 import wineRouter from "./routes/wine";
 import pairingRouter from "./routes/pairing";
 import grapeVarietyRouter from "./routes/grapeVariety";
