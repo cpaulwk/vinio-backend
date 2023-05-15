@@ -21,7 +21,6 @@ export const getProduct = async (
 ): Promise<Response> => {
   const { product_id, product, parent_id } = req.body;
   try {
-    /*
     const productList = await prisma.$queryRaw`
   WITH RECURSIVE children AS (
     SELECT *
@@ -36,30 +35,6 @@ export const getProduct = async (
   )
   SELECT *
   FROM children;
-`;
-*/
-    /*
-        const productList = await prisma.$queryRaw`
-      WITH RECURSIVE children AS (
-        SELECT *
-        FROM product
-        WHERE parent_id IN (3,4,5)
-        
-        UNION ALL
-        
-        SELECT product.*
-        FROM children
-        JOIN product ON product.parent_id = children.product_id
-      )
-      SELECT *
-      FROM children;
-    `;
-    */
-
-    const productList = await prisma.$queryRaw`
-    SELECT *
-    FROM product
-    WHERE parent_id IN (3,4,5)
 `;
 
     return res.json({ result: true, products: productList });
