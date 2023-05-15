@@ -39,7 +39,7 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     FROM children
     JOIN product ON product.parent_id = children.product_id
   )
-  SELECT *
+  SELECT product_id, product
   FROM children;
 `;
         return res.json({ result: true, products: productList });
