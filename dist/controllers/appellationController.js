@@ -9,26 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grapeVarietyWineType = void 0;
+exports.appellationWineBlend = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { grape_variety_id, grape_variety } = req.body;
+const appellationWineBlend = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { appellation_id, appellation } = req.body;
     try {
-        const grapeVariety = yield prisma.grape_variety.findMany({
+        const getAppellation = yield prisma.appellation.findMany({
             where: {
-                // grape_variety_id: parseInt(grape_variety_id),
-                grape_variety: grape_variety,
+                // appellation_id: parseInt(appellation_id),
+                appellation: appellation,
             },
             include: {
-                wine_type: {
+                wine_blend: {
                     select: {
-                        wine_type: true,
+                        wine_blend: true,
                     },
                 },
             },
         });
-        return res.json({ result: true, grapeVarieties: grapeVariety });
+        return res.json({ result: true, appellations: getAppellation });
     }
     catch (error) {
         console.error(error);
@@ -37,4 +37,4 @@ const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, fun
             .json({ result: false, error: "Internal Server Error" });
     }
 });
-exports.grapeVarietyWineType = grapeVarietyWineType;
+exports.appellationWineBlend = appellationWineBlend;

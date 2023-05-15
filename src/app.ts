@@ -98,8 +98,12 @@ async function deleteWine(): Promise<void> {
 import wineRouter from "./routes/wine";
 import pairingRouter from "./routes/pairing";
 import grapeVarietyRouter from "./routes/grapeVariety";
+import appellationRouter from "./routes/appellation";
+import productRouter from "./routes/product";
 app.use("/wine", wineRouter);
 app.use("/pairing", pairingRouter);
 app.use("/grape-variety", grapeVarietyRouter);
+app.use("/appellation", appellationRouter);
+app.use("/product", productRouter);
 
 module.exports = app;

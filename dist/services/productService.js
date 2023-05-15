@@ -9,26 +9,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grapeVarietyWineType = void 0;
+exports.productRecursiveList = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { grape_variety_id, grape_variety } = req.body;
+const productRecursiveList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { product_id, product, parent_id } = req.body;
     try {
-        const grapeVariety = yield prisma.grape_variety.findMany({
-            where: {
-                // grape_variety_id: parseInt(grape_variety_id),
-                grape_variety: grape_variety,
-            },
-            include: {
-                wine_type: {
-                    select: {
-                        wine_type: true,
-                    },
-                },
-            },
-        });
-        return res.json({ result: true, grapeVarieties: grapeVariety });
+        /*
+        const productList = await prisma.$queryRaw`
+      WITH RECURSIVE children AS (
+        SELECT *
+        FROM product
+        WHERE parent_id = ${product_id}
+        
+        UNION ALL
+        
+        SELECT product.*
+        FROM children
+        JOIN product ON product.parent_id = children.product_id
+      )
+      SELECT *
+      FROM children;
+    `;
+    */
+        const productList = yield prisma.$queryRaw `
+  WITH RECURSIVE children AS (
+    SELECT *
+    FROM product
+    WHERE parent_id = ${product_id}
+    
+    UNION ALL
+    
+    SELECT product.*
+    FROM children
+    JOIN product ON product.parent_id = children.product_id
+  )
+  SELECT *
+  FROM children;
+`;
+        return res.json({ result: true, products: productList });
     }
     catch (error) {
         console.error(error);
@@ -37,4 +56,4 @@ const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, fun
             .json({ result: false, error: "Internal Server Error" });
     }
 });
-exports.grapeVarietyWineType = grapeVarietyWineType;
+exports.productRecursiveList = productRecursiveList;

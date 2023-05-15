@@ -12,11 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.appellationPairing = exports.grapeVarietyPairing = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+const extractProducts = (obj, arr) => {
+    for (const key in obj) {
+        const value = obj[key];
+        if (typeof value === "object") {
+            extractProducts(value, arr);
+        }
+        else if (key === "product_id") {
+            arr.push(value);
+        }
+    }
+    return arr;
+};
 const grapeVarietyPairing = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { grape_variety_id, grape_variety } = req.body;
-    // console.log("req.body.wine_type =>", grape_variety);
     try {
-        const grapeVariety = yield prisma.grape_variety.findMany({
+        const grapeVarietyMatch = yield prisma.grape_variety.findMany({
             where: {
                 // grape_variety_id: parseInt(grape_variety_id),
                 grape_variety: grape_variety,
@@ -28,6 +39,7 @@ const grapeVarietyPairing = (req, res) => __awaiter(void 0, void 0, void 0, func
                             include: {
                                 product: {
                                     select: {
+                                        product_id: true,
                                         product: true,
                                     },
                                 },
@@ -37,7 +49,21 @@ const grapeVarietyPairing = (req, res) => __awaiter(void 0, void 0, void 0, func
                 },
             },
         });
-        return res.json({ result: true, wines: grapeVariety });
+        const productsList = extractProducts(grapeVarietyMatch, []);
+        console.log("productsList =>", productsList);
+        const pairedProducts = yield prisma.product.findMany({
+            where: {
+                parent_id: {
+                    in: productsList,
+                },
+            },
+            select: {
+                product_id: true,
+                product: true,
+            },
+        });
+        // return res.json({ result: true, pairing: grapeVariety });
+        return res.json({ result: true, pairing: pairedProducts });
     }
     catch (error) {
         console.error(error);
@@ -50,7 +76,7 @@ exports.grapeVarietyPairing = grapeVarietyPairing;
 const appellationPairing = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { appellation_id, appellation } = req.body;
     try {
-        const grapeVariety = yield prisma.appellation.findMany({
+        const appellationMatch = yield prisma.appellation.findMany({
             where: {
                 // appellation_id: parseInt(appellation_id),
                 appellation: appellation,
@@ -75,7 +101,20 @@ const appellationPairing = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 },
             },
         });
-        return res.json({ result: true, wines: grapeVariety });
+        const appellationList = extractProducts(appellationMatch, []);
+        console.log("productsList =>", appellationList);
+        const pairedProducts = yield prisma.product.findMany({
+            where: {
+                parent_id: {
+                    in: appellationList,
+                },
+            },
+            select: {
+                product_id: true,
+                product: true,
+            },
+        });
+        return res.json({ result: true, pairing: pairedProducts });
     }
     catch (error) {
         console.error(error);

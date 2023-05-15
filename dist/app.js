@@ -99,7 +99,11 @@ function deleteWine() {
 const wine_1 = __importDefault(require("./routes/wine"));
 const pairing_1 = __importDefault(require("./routes/pairing"));
 const grapeVariety_1 = __importDefault(require("./routes/grapeVariety"));
+const appellation_1 = __importDefault(require("./routes/appellation"));
+const product_1 = __importDefault(require("./routes/product"));
 app.use("/wine", wine_1.default);
 app.use("/pairing", pairing_1.default);
 app.use("/grape-variety", grapeVariety_1.default);
+app.use("/appellation", appellation_1.default);
+app.use("/product", product_1.default);
 module.exports = app;

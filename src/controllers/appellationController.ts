@@ -3,26 +3,26 @@ import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const grapeVarietyWineType = async (
+export const appellationWineBlend = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { grape_variety_id, grape_variety } = req.body;
+  const { appellation_id, appellation } = req.body;
   try {
-    const grapeVariety = await prisma.grape_variety.findMany({
+    const getAppellation = await prisma.appellation.findMany({
       where: {
-        // grape_variety_id: parseInt(grape_variety_id),
-        grape_variety: grape_variety,
+        // appellation_id: parseInt(appellation_id),
+        appellation: appellation,
       },
       include: {
-        wine_type: {
+        wine_blend: {
           select: {
-            wine_type: true,
+            wine_blend: true,
           },
         },
       },
     });
-    return res.json({ result: true, grapeVarieties: grapeVariety });
+    return res.json({ result: true, appellations: getAppellation });
   } catch (error) {
     console.error(error);
     return res
