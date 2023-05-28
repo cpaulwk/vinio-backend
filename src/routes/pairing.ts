@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.get("/grape-variety", grapeVarietyPairing);
-router.get("/appellation", appellationPairing);
+router.post("/grape-variety", grapeVarietyPairing);
+router.post("/appellation", appellationPairing);
 
 export default router;
