@@ -30,3 +30,22 @@ export const grapeVarietyWineType = async (
       .json({ result: false, error: "Internal Server Error" });
   }
 };
+
+export const allGrapeVariety = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const grapeVariety = await prisma.grape_variety.findMany({
+      select: {
+        grape_variety: true,
+      },
+    });
+    return res.json({ result: true, grapeVarieties: grapeVariety });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ result: false, error: "Internal Server Error" });
+  }
+};

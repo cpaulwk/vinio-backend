@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.grapeVarietyWineType = void 0;
+exports.allGrapeVariety = exports.grapeVarietyWineType = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,3 +38,20 @@ const grapeVarietyWineType = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.grapeVarietyWineType = grapeVarietyWineType;
+const allGrapeVariety = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const grapeVariety = yield prisma.grape_variety.findMany({
+            select: {
+                grape_variety: true,
+            },
+        });
+        return res.json({ result: true, grapeVarieties: grapeVariety });
+    }
+    catch (error) {
+        console.error(error);
+        return res
+            .status(500)
+            .json({ result: false, error: "Internal Server Error" });
+    }
+});
+exports.allGrapeVariety = allGrapeVariety;

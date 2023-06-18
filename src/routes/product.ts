@@ -1,8 +1,8 @@
 import express from "express";
-import { getProduct } from "../controllers/productController";
+import { getProductFromAppellation } from "../controllers/productController";
 
 const router = express.Router();
 
-router.get("/", getProduct);
+router.post("/", getProductFromAppellation);
 
 export default router;

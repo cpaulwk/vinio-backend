@@ -1,8 +1,12 @@
 import express from "express";
-import { grapeVarietyWineType } from "../controllers/grapeVarietyController";
+import {
+  grapeVarietyWineType,
+  allGrapeVariety,
+} from "../controllers/grapeVarietyController";
 
 const router = express.Router();
 
-router.get("/", grapeVarietyWineType);
+router.get("/", allGrapeVariety);
+router.post("/", grapeVarietyWineType);
 
 export default router;

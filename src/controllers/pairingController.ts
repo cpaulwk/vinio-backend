@@ -1,66 +1,33 @@
 import { Request, Response } from "express";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const extractProducts = (obj: Record<string, any>, arr: any[]): any[] => {
-  for (const key in obj) {
-    const value = obj[key];
-    if (typeof value === "object") {
-      extractProducts(value, arr);
-    } else if (key === "product_id") {
-      arr.push(value);
-    }
-  }
-  return arr;
-};
-
-export const grapeVarietyPairing = async (
+export const suggestionForGrapeVariety = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { grape_variety_id, grape_variety } = req.body;
+  const { grape_variety } = req.body;
   try {
-    const grapeVarietyMatch = await prisma.grape_variety.findMany({
-      where: {
-        // grape_variety_id: parseInt(grape_variety_id),
-        grape_variety: grape_variety,
-      },
-      include: {
-        wine_type: {
-          include: {
-            wine_type_pairs_with_product: {
-              include: {
-                product: {
-                  select: {
-                    product_id: true,
-                    product: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    const pairingForGrapeVariety =
+      await prisma.$queryRaw`WITH RECURSIVE children AS (
+    SELECT DISTINCT p.*
+    FROM product p, wine_type_pairs_with_product wtp
+    WHERE p.product_id = wtp.product_id
+    AND wtp.wine_type_id IN (SELECT gv.wine_type_id FROM grape_variety gv WHERE
+    gv.grape_variety = ${grape_variety})
 
-    const productsList = extractProducts(grapeVarietyMatch, []);
-    console.log("productsList =>", productsList);
+    UNION ALL
 
-    const pairedProducts = await prisma.product.findMany({
-      where: {
-        parent_id: {
-          in: productsList,
-        },
-      },
-      select: {
-        product_id: true,
-        product: true,
-      },
-    });
+    SELECT product.*
+    FROM children
+    JOIN product ON product.parent_id = children.product_id
+    )
+    SELECT *
+    FROM children;`;
 
-    // return res.json({ result: true, pairing: grapeVariety });
-    return res.json({ result: true, pairing: pairedProducts });
+    console.log("Requested this route");
+    return res.json({ result: true, pairing: pairingForGrapeVariety });
   } catch (error) {
     console.error(error);
     return res
@@ -69,53 +36,164 @@ export const grapeVarietyPairing = async (
   }
 };
 
-export const appellationPairing = async (
+export const additionalSuggestionForGrapeVariety = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { appellation_id, appellation } = req.body;
+  const { grape_variety } = req.body;
   try {
-    const appellationMatch = await prisma.appellation.findMany({
-      where: {
-        // appellation_id: parseInt(appellation_id),
-        appellation: appellation,
-      },
-      include: {
-        wine_blend: {
-          include: {
-            wine_type: {
-              include: {
-                wine_type_pairs_with_product: {
-                  include: {
-                    product: {
-                      select: {
-                        product: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    const sameWineType = await prisma.$queryRaw`
+    SELECT grape_variety
+		FROM grape_variety
+		WHERE wine_type_id = (
+			SELECT wine_type_id
+			FROM grape_variety
+			WHERE grape_variety = ${grape_variety}
+		) AND grape_variety <> ${grape_variety}
+		ORDER BY RAND() ASC
+		LIMIT 5;
+    `;
 
-    const appellationList = extractProducts(appellationMatch, []);
-    console.log("productsList =>", appellationList);
+    console.log("Requested this route");
+    return res.json({ result: true, pairing: sameWineType });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ result: false, error: "Internal Server Error" });
+  }
+};
 
-    const pairedProducts = await prisma.product.findMany({
-      where: {
-        parent_id: {
-          in: appellationList,
+export const suggestionForWineBlend = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { wine_blend } = req.body;
+  try {
+    const pairingForWineBlend =
+      await prisma.$queryRaw`WITH RECURSIVE children AS (
+    SELECT DISTINCT p.*
+    FROM product p, wine_type_pairs_with_product wtp
+    WHERE p.product_id = wtp.product_id
+    AND wtp.wine_type_id IN (SELECT wb.wine_type_id FROM wine_blend wb WHERE
+    wb.wine_blend = ${wine_blend})
+
+    UNION ALL
+
+    SELECT product.*
+    FROM children
+    JOIN product ON product.parent_id = children.product_id
+    )
+    SELECT *
+    FROM children;`;
+
+    console.log("Requested this route");
+    return res.json({ result: true, pairing: pairingForWineBlend });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ result: false, error: "Internal Server Error" });
+  }
+};
+
+export const findCheesePairing = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { grape_variety, cheese } = req.body;
+  try {
+    const resultCheesePairing =
+      await prisma.wine_type_pairs_with_product.findFirst({
+        where: {
+          product: { product: cheese },
+          wine_type: { wine_type: grape_variety },
         },
-      },
-      select: {
-        product_id: true,
-        product: true,
-      },
-    });
-    return res.json({ result: true, pairing: pairedProducts });
+      });
+
+    console.log("resultCheesePairing => ", resultCheesePairing);
+
+    console.log("Requested this route");
+    return res.json({ result: true, pairing: resultCheesePairing });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ result: false, error: "Internal Server Error" });
+  }
+};
+
+export const pairingGrapeVarietyResult = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { grape_variety, product } = req.body;
+  try {
+    const pairingForGrapeVariety = await prisma.$queryRaw`
+				WITH RECURSIVE get_product_parents (product_id, product, parent_id, recursion_level) AS (
+				  SELECT
+					  product_id,
+						product,
+						parent_id,
+						2
+					FROM product
+					WHERE product = ${product}
+
+					UNION ALL
+
+					SELECT
+					  p.product_id,
+						p.product,
+						p.parent_id,
+						gpp.recursion_level - 1
+					FROM get_product_parents gpp, product p
+					WHERE p.product_id = gpp.parent_id
+			),
+		
+				get_product_family (product_id, product) AS (
+					SELECT
+						product_id,
+						product
+					FROM get_product_parents
+					WHERE recursion_level = 1
+				),
+
+				get_wine_type (wine_type_id, wine_type) AS (
+					SELECT 
+						wt.wine_type_id,
+					  wt.wine_type
+					FROM wine_type wt
+					JOIN grape_variety gv
+					ON wt.wine_type_id = gv.wine_type_id
+					WHERE gv.grape_variety = ${grape_variety}
+				),
+
+				result (wine_type_id, product_id, excellent_pairing) AS (
+					SELECT
+						wtpwp.wine_type_id,
+						wtpwp.product_id,
+						wtpwp.excellent_pairing
+					FROM wine_type_pairs_with_product wtpwp
+					JOIN wine_type wt
+					ON wt.wine_type_id = wtpwp.wine_type_id
+					JOIN product p
+					ON p.product_id = wtpwp.product_id
+					WHERE wt.wine_type_id = (
+						SELECT wine_type_id
+						FROM get_wine_type
+					)
+					AND p.product_id = (
+						SELECT product_id
+						FROM get_product_family
+          )
+				)
+
+				SELECT *
+				FROM result;`;
+
+    console.log("pairingForGrapeVariety =>", pairingForGrapeVariety);
+    console.log("Requested this route");
+    return res.json({ result: true, pairing: pairingForGrapeVariety });
   } catch (error) {
     console.error(error);
     return res

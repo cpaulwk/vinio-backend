@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const grapeVarietyController_1 = require("../controllers/grapeVarietyController");
+const autocompleteController_1 = require("../controllers/autocompleteController");
 const router = express_1.default.Router();
-router.get("/", grapeVarietyController_1.allGrapeVariety);
-router.post("/", grapeVarietyController_1.grapeVarietyWineType);
+router.get("/", autocompleteController_1.allData);
 exports.default = router;

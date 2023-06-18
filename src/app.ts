@@ -55,10 +55,12 @@ import pairingRouter from "./routes/pairing";
 import grapeVarietyRouter from "./routes/grapeVariety";
 import appellationRouter from "./routes/appellation";
 import productRouter from "./routes/product";
+import autocompleteRouter from "./routes/autocomplete";
 app.use("/wine", wineRouter);
 app.use("/pairing", pairingRouter);
 app.use("/grape-variety", grapeVarietyRouter);
 app.use("/appellation", appellationRouter);
 app.use("/product", productRouter);
+app.use("/autocomplete", autocompleteRouter);
 
 module.exports = app;
