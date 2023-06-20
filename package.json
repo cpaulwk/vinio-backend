@@ -1,7 +1,6 @@
 {
   "scripts": {
-    "devStart": "nodemon dist/src/server.js",
-    "build": "tsc"
+    "devStart": "nodemon dist/src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
