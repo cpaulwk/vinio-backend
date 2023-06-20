@@ -30,4 +30,7 @@ app.use("/grape-variety", grapeVariety_1.default);
 app.use("/appellation", appellation_1.default);
 app.use("/product", product_1.default);
 app.use("/autocomplete", autocomplete_1.default);
+app.get("/", (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, "./index.html"));
+});
 module.exports = app;

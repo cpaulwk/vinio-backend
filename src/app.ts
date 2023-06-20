@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import express from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
@@ -30,5 +31,9 @@ app.use("/grape-variety", grapeVarietyRouter);
 app.use("/appellation", appellationRouter);
 app.use("/product", productRouter);
 app.use("/autocomplete", autocompleteRouter);
+
+app.get("/", (req: Request, res: Response): void => {
+  res.sendFile(path.join(__dirname, "./index.html"));
+});
 
 module.exports = app;
