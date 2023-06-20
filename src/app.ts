@@ -32,8 +32,4 @@ app.use("/appellation", appellationRouter);
 app.use("/product", productRouter);
 app.use("/autocomplete", autocompleteRouter);
 
-app.get("/", (req: Request, res: Response): void => {
-  res.sendFile(path.join(__dirname, "./index.html"));
-});
-
 module.exports = app;
