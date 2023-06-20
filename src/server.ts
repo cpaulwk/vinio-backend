@@ -42,4 +42,6 @@ app.get("/users/new", (req: Request, res: Response) => {
   res.send("User New Form");
 });
 
-// app.listen(3001);
+app.listen(3001);
+
+export default app;
