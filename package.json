@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "devStart": "nodemon dist/src/app.js"
+    "devStart": "nodemon dist/src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
@@ -22,7 +22,7 @@
   },
   "name": "vinio-backend",
   "version": "1.0.0",
-  "main": "dist/src/app.js",
+  "main": "dist/src/server.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
