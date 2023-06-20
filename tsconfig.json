@@ -102,5 +102,5 @@
     "outDir": "dist",
     "noEmitOnError": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "api/**/*"]
 }
