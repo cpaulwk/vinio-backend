@@ -88,17 +88,9 @@ const allData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
       SELECT
         appellation AS name,
         'appellation' AS category
-      FROM appellation;
+      FROM appellation
+      ORDER BY 1 ASC;
       `;
-        // SELECT
-        //   product,
-        //   'product' AS category
-        // FROM product
-        // UNION ALL
-        // SELECT
-        //   grape_variety,
-        //   'grape_variety' AS category
-        // FROM grape_variety
         return res.json({ result: true, allData: getAllData });
     }
     catch (error) {
