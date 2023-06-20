@@ -22,7 +22,7 @@
   },
   "name": "vinio-backend",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "dist/app.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
