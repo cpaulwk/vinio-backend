@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "nodemon --delay 2.5 ./bin/www"
+    "devStart": "nodemon dist/src/app.js"
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
@@ -22,7 +22,7 @@
   },
   "name": "vinio-backend",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
