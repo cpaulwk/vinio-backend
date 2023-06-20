@@ -7,6 +7,11 @@ import {
 
 const router = express.Router();
 
+router.route("/");
+// .get(getAllWines)
+// .post(addNewWine)
+// .delete(deleteWine);
+
 router.get("/", getAllWines);
 
 router.post("/", addNewWine);

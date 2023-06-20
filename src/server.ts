@@ -1,7 +1,20 @@
-import { Request, Response } from "express";
-
 import express from "express";
+import { Request, Response } from "express";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import bodyParser from "body-parser";
+
 const app = express();
+
+import cors from "cors";
+
+app.use(cors());
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 import wineRouter from "./routes/wine";
 import pairingRouter from "./routes/pairing";

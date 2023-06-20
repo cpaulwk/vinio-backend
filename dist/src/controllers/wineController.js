@@ -28,6 +28,7 @@ exports.getAllWines = getAllWines;
 // WIP add case management ie selected wine_id is a duplicate
 const addNewWine = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { wine_id, appellation_id, wine_color_id, wine_blend_id } = req.body;
+    console.log("req.body => ", req.body);
     try {
         const createdWine = yield prisma.wine.create({
             data: {
