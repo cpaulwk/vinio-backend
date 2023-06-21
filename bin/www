@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-var app = require("../dist/src/server");
+var app = require("../dist/server");
 // import app from "../dist/src/server";
 var debug = require("debug")("backend:server");
 var http = require("http");
