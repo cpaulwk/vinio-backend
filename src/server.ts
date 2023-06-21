@@ -44,4 +44,5 @@ app.get("/users/new", (req: Request, res: Response) => {
 
 // app.listen(3001);
 
-export default app;
+// export default app;
+module.exports = app;
