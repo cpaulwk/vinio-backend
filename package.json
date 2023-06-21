@@ -1,13 +1,15 @@
 {
   "scripts": {
-    "devStart": "nodemon ./bin/www"
+    "devStart": "nodemon ./bin/www",
+    "build": "rimraf dist && npx tsc"
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "rimraf": "^5.0.1"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
