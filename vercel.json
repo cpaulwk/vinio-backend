@@ -4,9 +4,8 @@
   "outputDirectory": "dist",
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static",
-      "config": { "distDir": "dist" }
+      "src": "dist/server.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
