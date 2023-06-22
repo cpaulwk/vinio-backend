@@ -4,7 +4,7 @@
   "outputDirectory": "dist",
   "builds": [
     {
-      "src": "package.json",
+      "src": "dist/server.js",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     }
