@@ -29,15 +29,6 @@ app.use("/appellation", appellation_1.default);
 app.use("/product", product_1.default);
 app.use("/autocomplete", autocomplete_1.default);
 app.get("/", (req, res) => {
-    console.log("Here");
-    res.send("Hi");
+    res.send("Welcome to the backend of Vinio");
 });
-app.get("/users", (req, res) => {
-    res.send("User List");
-});
-app.get("/users/new", (req, res) => {
-    res.send("User New Form");
-});
-// app.listen(3001);
-// export default app;
 module.exports = app;
