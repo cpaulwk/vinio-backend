@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "npx prisma generate && rimraf dist && npx tsc",
+    "postinstall": "prisma generate",
+    "build": "prisma generate && rimraf dist && npx tsc",
     "devStart": "nodemon ./bin/www"
   },
   "dependencies": {
