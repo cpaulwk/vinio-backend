@@ -1,7 +1,7 @@
 {
   "scripts": {
     "postinstall": "prisma generate",
-    "build": "prisma generate && npx tsc",
+    "build": "npx tsc",
     "devStart": "nodemon ./bin/www"
   },
   "dependencies": {
