@@ -1,7 +1,7 @@
 {
   "scripts": {
     "devStart": "nodemon ./bin/www",
-    "build": "rimraf dist && npx tsc"
+    "build": "rimraf dist && prisma generate && npx tsc"
   },
   "dependencies": {
     "@prisma/client": "^4.16.0",
