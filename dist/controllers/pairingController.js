@@ -30,7 +30,6 @@ const suggestionForGrapeVariety = (req, res) => __awaiter(void 0, void 0, void 0
     )
     SELECT *
     FROM children;`;
-        console.log("Requested this route");
         return res.json({ result: true, pairing: pairingForGrapeVariety });
     }
     catch (error) {
@@ -55,7 +54,6 @@ const additionalSuggestionForGrapeVariety = (req, res) => __awaiter(void 0, void
 		ORDER BY RAND() ASC
 		LIMIT 5;
     `;
-        console.log("Requested this route");
         return res.json({ result: true, pairing: sameWineType });
     }
     catch (error) {
@@ -84,7 +82,6 @@ const suggestionForWineBlend = (req, res) => __awaiter(void 0, void 0, void 0, f
     )
     SELECT *
     FROM children;`;
-        console.log("Requested this route");
         return res.json({ result: true, pairing: pairingForWineBlend });
     }
     catch (error) {
@@ -104,8 +101,6 @@ const findCheesePairing = (req, res) => __awaiter(void 0, void 0, void 0, functi
                 wine_type: { wine_type: grape_variety },
             },
         });
-        console.log("resultCheesePairing => ", resultCheesePairing);
-        console.log("Requested this route");
         return res.json({ result: true, pairing: resultCheesePairing });
     }
     catch (error) {
@@ -180,8 +175,6 @@ const pairingGrapeVarietyResult = (req, res) => __awaiter(void 0, void 0, void 0
 
 				SELECT *
 				FROM result;`;
-        console.log("pairingForGrapeVariety =>", pairingForGrapeVariety);
-        console.log("Requested this route");
         return res.json({ result: true, pairing: pairingForGrapeVariety });
     }
     catch (error) {

@@ -44,7 +44,6 @@ const getProductFromAppellation = (req, res) => __awaiter(void 0, void 0, void 0
         // SELECT product_id, product
         // FROM children;
         // `;
-        console.log("Requested this route");
         return res.json({ result: true, products: productList });
     }
     catch (error) {

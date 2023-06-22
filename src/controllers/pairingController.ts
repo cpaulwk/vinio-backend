@@ -26,7 +26,6 @@ export const suggestionForGrapeVariety = async (
     SELECT *
     FROM children;`;
 
-    console.log("Requested this route");
     return res.json({ result: true, pairing: pairingForGrapeVariety });
   } catch (error) {
     console.error(error);
@@ -54,7 +53,6 @@ export const additionalSuggestionForGrapeVariety = async (
 		LIMIT 5;
     `;
 
-    console.log("Requested this route");
     return res.json({ result: true, pairing: sameWineType });
   } catch (error) {
     console.error(error);
@@ -87,7 +85,6 @@ export const suggestionForWineBlend = async (
     SELECT *
     FROM children;`;
 
-    console.log("Requested this route");
     return res.json({ result: true, pairing: pairingForWineBlend });
   } catch (error) {
     console.error(error);
@@ -111,9 +108,6 @@ export const findCheesePairing = async (
         },
       });
 
-    console.log("resultCheesePairing => ", resultCheesePairing);
-
-    console.log("Requested this route");
     return res.json({ result: true, pairing: resultCheesePairing });
   } catch (error) {
     console.error(error);
@@ -191,8 +185,6 @@ export const pairingGrapeVarietyResult = async (
 				SELECT *
 				FROM result;`;
 
-    console.log("pairingForGrapeVariety =>", pairingForGrapeVariety);
-    console.log("Requested this route");
     return res.json({ result: true, pairing: pairingForGrapeVariety });
   } catch (error) {
     console.error(error);

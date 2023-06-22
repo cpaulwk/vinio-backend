@@ -8,7 +8,6 @@ var app = require("../dist/server");
 // import app from "../dist/src/server";
 var debug = require("debug")("backend:server");
 var http = require("http");
-console.log("app => ", app);
 
 /**
  * Get port from environment and store in Express.

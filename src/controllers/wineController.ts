@@ -25,7 +25,6 @@ export const addNewWine = async (
 ): Promise<Response> => {
   const { wine_id, appellation_id, wine_color_id, wine_blend_id } = req.body;
 
-  console.log("req.body => ", req.body);
   try {
     const createdWine = await prisma.wine.create({
       data: {

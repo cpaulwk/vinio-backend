@@ -42,7 +42,6 @@ export const getProductFromAppellation = async (
     // FROM children;
     // `;
 
-    console.log("Requested this route");
     return res.json({ result: true, products: productList });
   } catch (error) {
     console.error(error);
